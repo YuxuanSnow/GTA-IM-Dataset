@@ -10,8 +10,10 @@ import sys
 import cv2
 import numpy as np
 import open3d as o3d
-from open3d.geometry import (LineSet, PinholeCameraIntrinsic, Vector2iVector,
-                    Vector3dVector, draw_geometries)
+from open3d.geometry import LineSet
+from open3d.camera import PinholeCameraIntrinsic
+from open3d.utility import Vector2iVector, Vector3dVector
+from open3d.visualization import draw_geometries
 
 from gta_utils import LIMBS, read_depthmap
 
@@ -77,14 +79,14 @@ def vis_skeleton_pcd(rec_idx, f_id, fusion_window=20):
             color_raw = o3d.io.read_image(fname)
 
             focal_length = info_npz['intrinsics'][f_id, 0, 0]
-            rgbd_image = o3d.geometry.create_rgbd_image_from_color_and_depth(
+            rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(
                 color_raw,
                 depth,
                 depth_scale=1.0,
                 depth_trunc=15.0,
                 convert_rgb_to_intensity=False,
             )
-            pcd = o3d.geometry.create_point_cloud_from_rgbd_image(
+            pcd = o3d.geometry.PointCloud.create_from_rgbd_image(
                 rgbd_image,
                 o3d.camera.PinholeCameraIntrinsic(
                     PinholeCameraIntrinsic(
@@ -130,7 +132,7 @@ def vis_skeleton_pcd(rec_idx, f_id, fusion_window=20):
         else:
             r = 0.03
 
-        sphere = o3d.geometry.create_mesh_sphere(radius=r)
+        sphere = o3d.geometry.TriangleMesh.create_sphere(radius=r)
         sphere.paint_uniform_color([0.0, float(j // jn) / nskeletons, 1.0])
         vis_list.append(sphere.transform(transformation))
 
