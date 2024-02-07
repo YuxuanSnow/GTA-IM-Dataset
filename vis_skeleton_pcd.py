@@ -10,7 +10,7 @@ import sys
 import cv2
 import numpy as np
 import open3d as o3d
-from open3d import (LineSet, PinholeCameraIntrinsic, Vector2iVector,
+from open3d.geometry import (LineSet, PinholeCameraIntrinsic, Vector2iVector,
                     Vector3dVector, draw_geometries)
 
 from gta_utils import LIMBS, read_depthmap
